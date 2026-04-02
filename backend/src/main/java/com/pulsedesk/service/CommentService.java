@@ -26,6 +26,7 @@ public class CommentService {
 
         try {
             String aiResponse = huggingFaceService.analyzeComment(content);
+            System.out.println("=== AI RESPONSE: " + aiResponse);
             String json = extractJson(aiResponse);
             JsonNode result = objectMapper.readTree(json);
 
