@@ -92,7 +92,7 @@ While the backend is running, visit:
 http://localhost:8080/swagger-ui/index.html
 ```
 
-This gives you a full interactive interface to explore and test all endpoints directly in the browser — no curl needed.
+This gives you a full interactive interface to explore and test all endpoints directly in the browser.
 
 ---
 
