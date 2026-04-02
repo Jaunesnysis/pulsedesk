@@ -33,4 +33,3 @@ frontend/.next/
 frontend/dist/
 frontend/build/
 frontend/.env
-frontend/.env.local
