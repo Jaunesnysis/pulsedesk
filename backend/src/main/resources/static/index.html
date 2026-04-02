@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PulseDesk</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f4f4f8;
+        color: #1a1a2e;
+      }
+
+      nav {
+        background: #1a1a2e;
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .nav-dot {
+        width: 10px;
+        height: 10px;
+        background: #7f77dd;
+        border-radius: 50%;
+      }
+
+      .nav-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+      }
+
+      .nav-sub {
+        font-size: 12px;
+        color: #9090b0;
+        margin-left: auto;
+      }
+
+      main {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 24px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .card {
+        background: white;
+        border: 0.5px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 1.25rem;
+      }
+
+      .card-full {
+        grid-column: 1 / -1;
+      }
+
+      .card-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 12px;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 0.5px solid #ddd;
+        border-radius: 8px;
+        font-size: 13px;
+        font-family: inherit;
+        resize: vertical;
+        min-height: 90px;
+        background: #fafafa;
+      }
+
+      textarea:focus,
+      input:focus {
+        outline: none;
+        border-color: #7f77dd;
+      }
+
+      .field-label {
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 4px;
+        margin-top: 12px;
+      }
+
+      .field-label:first-child {
+        margin-top: 0;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 8px 12px;
+        border: 0.5px solid #ddd;
+        border-radius: 8px;
+        font-size: 13px;
+        font-family: inherit;
+        background: #fafafa;
+      }
+
+      button {
+        margin-top: 14px;
+        padding: 9px 20px;
+        background: #1a1a2e;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        width: 100%;
+        transition: opacity 0.2s;
+      }
+
+      button:hover {
+        opacity: 0.85;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .stat {
+        background: #f5f5f5;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .stat-num {
+        font-size: 22px;
+        font-weight: 600;
+        color: #1a1a2e;
+      }
+
+      .stat-label {
+        font-size: 11px;
+        color: #888;
+        margin-top: 2px;
+      }
+
+      .ticket {
+        border: 0.5px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .priority-bar {
+        width: 4px;
+        border-radius: 2px;
+        align-self: stretch;
+        flex-shrink: 0;
+        min-height: 40px;
+      }
+
+      .high {
+        background: #e24b4a;
+      }
+      .medium {
+        background: #ef9f27;
+      }
+      .low {
+        background: #639922;
+      }
+
+      .ticket-title {
+        font-size: 13px;
+        font-weight: 500;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+      }
+
+      .ticket-summary {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 4px;
+      }
+
+      .ticket-meta {
+        font-size: 11px;
+        color: #999;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .badge {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 600;
+        padding: 2px 7px;
+        border-radius: 99px;
+      }
+
+      .badge-bug {
+        background: #fcebeb;
+        color: #a32d2d;
+      }
+      .badge-feature {
+        background: #e6f1fb;
+        color: #0c447c;
+      }
+      .badge-billing {
+        background: #faeeda;
+        color: #633806;
+      }
+      .badge-account {
+        background: #eeedfe;
+        color: #3c3489;
+      }
+      .badge-other {
+        background: #f0f0f0;
+        color: #555;
+      }
+
+      .comment {
+        border: 0.5px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .comment-text {
+        font-size: 13px;
+        color: #1a1a1a;
+      }
+
+      .comment-meta {
+        font-size: 11px;
+        color: #999;
+        margin-top: 3px;
+      }
+
+      .pill-yes {
+        font-size: 11px;
+        font-weight: 500;
+        color: #3b6d11;
+        background: #eaf3de;
+        padding: 3px 10px;
+        border-radius: 99px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .pill-no {
+        font-size: 11px;
+        font-weight: 500;
+        color: #888;
+        background: #f0f0f0;
+        padding: 3px 10px;
+        border-radius: 99px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .empty {
+        font-size: 13px;
+        color: #aaa;
+        text-align: center;
+        padding: 24px 0;
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #1a1a2e;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 13px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+      }
+
+      .toast.show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-dot"></div>
+      <span class="nav-title">PulseDesk</span>
+      <span class="nav-sub">Comment Triage System</span>
+    </nav>
+
+    <main>
+      <div class="card">
+        <div class="card-label">Submit feedback</div>
+        <div class="field-label">Comment</div>
+        <textarea
+          id="content"
+          placeholder="Describe your issue or feedback..."
+        ></textarea>
+        <div class="field-label">Source</div>
+        <input
+          type="text"
+          id="source"
+          placeholder="e.g. web-form, app-review, chat"
+          value="web-form"
+        />
+        <button id="submitBtn" onclick="submitComment()">
+          Analyze & submit
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Overview</div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-num" id="totalComments">0</div>
+            <div class="stat-label">Comments</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="totalTickets">0</div>
+            <div class="stat-label">Tickets</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="totalIgnored">0</div>
+            <div class="stat-label">Ignored</div>
+          </div>
+        </div>
+        <div class="card-label">Latest ticket</div>
+        <div id="latestTicket"><div class="empty">No tickets yet</div></div>
+      </div>
+
+      <div class="card card-full">
+        <div class="card-label">Tickets</div>
+        <div id="ticketsList"><div class="empty">No tickets yet</div></div>
+      </div>
+
+      <div class="card card-full">
+        <div class="card-label">All comments</div>
+        <div id="commentsList"><div class="empty">No comments yet</div></div>
+      </div>
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+      const API = "";
+
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 3000);
+      }
+
+      function getBadge(category) {
+        return `<span class="badge badge-${category}">${category}</span>`;
+      }
+
+      function getPriorityClass(priority) {
+        if (priority === "high") return "high";
+        if (priority === "medium") return "medium";
+        return "low";
+      }
+
+      function formatDate(dateStr) {
+        return new Date(dateStr).toLocaleString();
+      }
+
+      async function loadTickets() {
+        const res = await fetch(`${API}/tickets`);
+        const tickets = await res.json();
+
+        document.getElementById("totalTickets").textContent = tickets.length;
+
+        const list = document.getElementById("ticketsList");
+        const latest = document.getElementById("latestTicket");
+
+        if (tickets.length === 0) {
+          list.innerHTML = '<div class="empty">No tickets yet</div>';
+          latest.innerHTML = '<div class="empty">No tickets yet</div>';
+          return;
+        }
+
+        list.innerHTML = tickets
+          .map(
+            (t) => `
+      <div class="ticket">
+        <div class="priority-bar ${getPriorityClass(t.priority)}"></div>
+        <div>
+          <div class="ticket-title">${t.title}</div>
+          <div class="ticket-summary">${t.summary}</div>
+          <div class="ticket-meta">
+            ${getBadge(t.category)}
+            ${t.priority} priority &middot; ${formatDate(t.createdAt)}
+          </div>
+        </div>
+      </div>
+    `,
+          )
+          .join("");
+
+        const last = tickets[tickets.length - 1];
+        latest.innerHTML = `
+      <div class="ticket">
+        <div class="priority-bar ${getPriorityClass(last.priority)}"></div>
+        <div>
+          <div class="ticket-title">${last.title}</div>
+          <div class="ticket-meta">${getBadge(last.category)} ${last.priority} priority</div>
+        </div>
+      </div>
+    `;
+      }
+
+      async function loadComments() {
+        const res = await fetch(`${API}/comments`);
+        const comments = await res.json();
+
+        document.getElementById("totalComments").textContent = comments.length;
+
+        const tickets = parseInt(
+          document.getElementById("totalTickets").textContent,
+        );
+        document.getElementById("totalIgnored").textContent =
+          comments.length - tickets;
+
+        const list = document.getElementById("commentsList");
+        if (comments.length === 0) {
+          list.innerHTML = '<div class="empty">No comments yet</div>';
+          return;
+        }
+
+        list.innerHTML = comments
+          .slice()
+          .reverse()
+          .map(
+            (c) => `
+      <div class="comment">
+        <div>
+          <div class="comment-text">${c.content}</div>
+          <div class="comment-meta">${c.source} &middot; ${formatDate(c.createdAt)}</div>
+        </div>
+        ${
+          c.convertedToTicket
+            ? '<span class="pill-yes">ticket created</span>'
+            : '<span class="pill-no">no ticket</span>'
+        }
+      </div>
+    `,
+          )
+          .join("");
+      }
+
+      async function submitComment() {
+        const content = document.getElementById("content").value.trim();
+        const source = document.getElementById("source").value.trim();
+        const btn = document.getElementById("submitBtn");
+
+        if (!content || !source) {
+          showToast("Please fill in both fields");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Analyzing...";
+
+        try {
+          const res = await fetch(`${API}/comments`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content, source }),
+          });
+
+          if (!res.ok) throw new Error("Failed to submit");
+
+          const comment = await res.json();
+          document.getElementById("content").value = "";
+
+          showToast(
+            comment.convertedToTicket
+              ? "Comment submitted — ticket created!"
+              : "Comment submitted — no ticket needed",
+          );
+
+          await loadTickets();
+          await loadComments();
+        } catch (e) {
+          showToast("Error submitting comment");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Analyze & submit";
+        }
+      }
+
+      async function init() {
+        await loadTickets();
+        await loadComments();
+      }
+
+      init();
+    </script>
+  </body>
+</html>
