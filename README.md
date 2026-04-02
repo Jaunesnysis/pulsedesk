@@ -2,17 +2,15 @@
 
 A backend application that collects user comments and uses AI to automatically triage them into support tickets.
 
-Built with Java, Spring Boot, H2 and Hugging Face AI — IBM Internship Technical Challenge.
-
 ---
 
 ## How it works
 
-1. User submits a comment via `POST /comments`
+1. User submits a comment via the UI or `POST /comments`
 2. The app sends the comment to Mistral AI (via Hugging Face)
 3. AI decides if the comment is a real issue or just a compliment
-4. If it's a real issue — a ticket is automatically created with a title, category, priority and summary
-5. Tickets are available via `GET /tickets`
+4. If it's a real issue ticket is automatically created with a title, category, priority and summary
+5. Tickets are available via the UI or `GET /tickets`
 
 ---
 
@@ -23,12 +21,14 @@ pulsedesk/
 ├── backend/                  Spring Boot application
 │   ├── src/main/java/com/pulsedesk/
 │   │   ├── controller/       REST endpoints
-│   │   ├── service/          Business logic + AI integration
+│   │   ├── service/          Business logic + AI
 │   │   ├── repository/       Database access
-│   │   ├── model/            Comment and Ticket entities
-│   │   └── dto/              Request/response objects
+│   │   ├── model/            Comment and Ticket
+│   │   ├── dto/              Request/response objects
+│   │   ├── config/           CORS configuration
+│   │   └── exception/        Global error handling
 │   └── src/test/             Unit tests
-└── frontend/                 Reserved for future UI
+└── frontend/                 React + Vite frontend
 ```
 
 ---
@@ -37,6 +37,7 @@ pulsedesk/
 
 - Java 17
 - Maven (included via `mvnw`)
+- Node.js 18+ (for frontend)
 - Hugging Face account + API token with **Inference Providers** permission
 
 ---
@@ -57,14 +58,29 @@ cd pulsedesk
 - Enable **"Make calls to Inference Providers"**
 - Copy the token
 
-**3. Run the application**
+**3. Create your environment file**
 
 ```bash
 cd backend
-HF_TOKEN=your_token_here ./mvnw spring-boot:run
+echo "HF_TOKEN=your_token_here" > .env
 ```
 
-The app starts on `http://localhost:8080`
+**4. Run the backend**
+
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+
+**5. Run the frontend in second terminal**
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend starts on `http://localhost:5173`
 
 ---
 
@@ -151,24 +167,10 @@ Response:
 
 ```bash
 cd backend
-HF_TOKEN=any_value ./mvnw test
+./mvnw test
 ```
 
-All 9 tests should pass. Tests use mocks — no real API calls are made.
-
----
-
-## H2 Database console
-
-While the app is running, visit:
-
-```
-http://localhost:8080/h2-console
-```
-
-- JDBC URL: `jdbc:h2:mem:pulsedeskdb`
-- Username: `sa`
-- Password: (leave empty)
+All tests should pass. Tests use mocks — no real API calls are made.
 
 ---
 
@@ -183,3 +185,4 @@ http://localhost:8080/h2-console
 | AI        | Hugging Face — Mistral-7B-Instruct |
 | Testing   | JUnit 5 + Mockito                  |
 | Build     | Maven                              |
+| Frontend  | React + Vite                       |
