@@ -71,7 +71,12 @@ public class HuggingFaceService {
                 - If the comment describes a real problem, bug, or request, set "isTicket" to true and fill all fields.
 
                 Categories: bug, feature, billing, account, other
-                Priorities: low, medium, high
+                
+                Priority rules — follow these strictly:
+                - high: app is broken, data loss, can't log in, payment issues, security problems
+                - medium: feature partially broken, workaround exists, affects multiple users
+                - low: cosmetic issues, typos, UI misalignment, minor inconveniences, small feature requests, performance slightly slow
+
 
                 Comment: "%s"
 
