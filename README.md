@@ -37,7 +37,7 @@ pulsedesk/
 
 - Java 17
 - Maven (included via `mvnw`)
-- Node.js 18+ (for frontend)
+- Node.js 20+ (for frontend)
 - Hugging Face account + API token with **Inference Providers** permission
 
 ---
